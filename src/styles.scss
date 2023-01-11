@@ -1,6 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~normalize.css";
 
+$green: #8dc63f;
+$dark: #373737;
+$white: #ffffff;
+$lightgray: #fcfcfc;
+
 html {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -65,7 +70,7 @@ body {
 
 /* Colors */
 .corner-ribbon.green {
-  background: #2c7;
+  background: $green;
 }
 .corner-ribbon.red {
   background: #e43;
