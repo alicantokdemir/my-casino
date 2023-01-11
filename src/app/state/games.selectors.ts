@@ -4,6 +4,13 @@ import { selectJackpots } from './jackpots.selectors';
 
 export const selectGames = createFeatureSelector<ReadonlyArray<Game>>('games');
 
+export const selectGamesByCategories = (categories: string[]) =>
+  createSelector(selectGames, (games) =>
+    games.filter((game) =>
+      categories.some((filter) => game.categories.includes(filter))
+    )
+  );
+
 // export const selectGameJackpots = createSelector(
 //   selectGames,
 //   selectJackpots,

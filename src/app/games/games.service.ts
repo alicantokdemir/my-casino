@@ -9,16 +9,12 @@ import { Game } from './games.model';
 export class GamesService {
   constructor(private http: HttpClient) {}
 
-  getGames(filters: string[]): Observable<Array<Game>> {
+  getGames(): Observable<Array<Game>> {
     return this.http
       .get<Game[]>('http://stage.whgstage.com/front-end-test/games.php')
       .pipe(
         map((games) => {
-          return (
-            games.filter((game) =>
-              filters.some((filter) => game.categories.includes(filter))
-            ) || []
-          );
+          return games || [];
         })
       );
   }

@@ -11,6 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { StoreModule } from '@ngrx/store';
 import { gamesReducer } from './state/games.reducer';
 import { HttpClientModule } from '@angular/common/http';
+import { jackpotsReducer } from './state/jackpots.reducer';
 
 @NgModule({
   declarations: [AppComponent, GamesListComponent],
@@ -21,7 +22,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatTabsModule,
     MatGridListModule,
     MatCardModule,
-    StoreModule.forRoot({ games: gamesReducer }, {}),
+    StoreModule.forRoot({ games: gamesReducer, jackpots: jackpotsReducer }, {}),
     HttpClientModule,
   ],
   providers: [],

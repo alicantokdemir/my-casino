@@ -1,10 +1,15 @@
 import { Component } from '@angular/core';
 // import { games } from './games';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { JackpotsApiActions } from '../jackpots/jackpots.actions';
 
-import { selectGames } from '../state/games.selectors';
+import { selectGames, selectGamesByCategories } from '../state/games.selectors';
+import { selectJackpotObj } from '../state/jackpots.selectors';
 import { GamesApiActions } from './games.actions';
+import { Game } from './games.model';
 import { GamesService } from './games.service';
+import { JackpotsService } from '../jackpots/jackpots.service';
 
 function getGridColCount(innerWidth: number) {
   if (innerWidth <= 450) {
@@ -26,35 +31,18 @@ function getGridColCount(innerWidth: number) {
   styleUrls: ['./games.component.scss'],
 })
 export class GamesListComponent {
-  constructor(private gamesService: GamesService, private store: Store) {}
+  constructor(
+    private gamesService: GamesService,
+    private store: Store,
+    private jackpotsService: JackpotsService
+  ) {}
 
   onTabChange(e: any) {
     const { filters } = this.gameTabs[e.index];
-
-    this.gamesService
-      .getGames(filters)
-      .subscribe((games) =>
-        this.store.dispatch(GamesApiActions.retrievedGamesList({ games }))
-      );
+    this.games$ = this.store.select(selectGamesByCategories(filters));
   }
 
   breakpoint = 5;
-
-  games$ = this.store.select(selectGames);
-
-  ngOnInit() {
-    this.breakpoint = getGridColCount(window.innerWidth);
-
-    this.gamesService
-      .getGames(this.gameTabs[0].filters)
-      .subscribe((games) =>
-        this.store.dispatch(GamesApiActions.retrievedGamesList({ games }))
-      );
-  }
-
-  onResize(event: any) {
-    this.breakpoint = getGridColCount(event.target?.innerWidth);
-  }
 
   gameTabs = [
     {
@@ -98,4 +86,26 @@ export class GamesListComponent {
       filters: ['ball', 'virtual', 'fun'],
     },
   ];
+
+  games$ = this.store.select(selectGamesByCategories(this.gameTabs[0].filters));
+  jackpots$ = this.store.select(selectJackpotObj);
+
+  ngOnInit() {
+    this.breakpoint = getGridColCount(window.innerWidth);
+
+    this.gamesService.getGames().subscribe((games) => {
+      this.store.dispatch(GamesApiActions.retrievedGamesList({ games }));
+    });
+
+    this.jackpotsService.getJackpots().subscribe((jackpots) => {
+      console.log('jackpots ', jackpots)
+      this.store.dispatch(
+        JackpotsApiActions.retrievedJackpotsList({ jackpots })
+      );
+    });
+  }
+
+  onResize(event: any) {
+    this.breakpoint = getGridColCount(event.target?.innerWidth);
+  }
 }

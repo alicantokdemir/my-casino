@@ -1,5 +1,5 @@
 <mat-tab-group (selectedTabChange)="onTabChange($event)">
-  <mat-tab *ngFor="let tab of gameTabs; index as i" [label]="tab.label">
+  <mat-tab *ngFor="let tab of gameTabs" [label]="tab.label">
     <div class="game-grid">
       <mat-grid-list
         [cols]="breakpoint"
@@ -7,11 +7,27 @@
         gutterSize="10"
         (window:resize)="onResize($event)"
       >
-        <mat-grid-tile *ngFor="let game of games$ | async; index as i">
+        <mat-grid-tile *ngFor="let game of games$ | async">
           <mat-card class="game-card">
-            <!-- <mat-card-header>
-              <mat-card-title></mat-card-title>
-            </mat-card-header> -->
+            <div
+              *ngIf="game.categories.includes('top')"
+              class="corner-ribbon top-left red shadow"
+            >
+              Top
+            </div>
+            <div
+              *ngIf="game.categories.includes('new')"
+              class="corner-ribbon top-right green shadow"
+            >
+              New
+            </div>
+
+            <div
+              *ngIf="(jackpots$ | async)![game.id]"
+              class="game-card__jackpot"
+            >
+              {{ (jackpots$ | async)![game.id] }}
+            </div>
             <img mat-card-image [src]="game.image" [alt]="game.name" />
           </mat-card>
         </mat-grid-tile>

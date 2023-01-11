@@ -9,7 +9,7 @@ import { Jackpot } from './jackpots.model';
 export class JackpotsService {
   constructor(private http: HttpClient) {}
 
-  getGames(): Observable<Array<Jackpot>> {
+  getJackpots(): Observable<Array<Jackpot>> {
     return this.http
       .get<Jackpot[]>('http://stage.whgstage.com/front-end-test/jackpots.php')
       .pipe(
