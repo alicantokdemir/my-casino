@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 // import { games } from './games';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { interval, Observable, switchMap } from 'rxjs';
 import { JackpotsApiActions } from '../jackpots/jackpots.actions';
 
 import { selectGames, selectGamesByCategories } from '../state/games.selectors';
@@ -97,12 +97,14 @@ export class GamesListComponent {
       this.store.dispatch(GamesApiActions.retrievedGamesList({ games }));
     });
 
-    this.jackpotsService.getJackpots().subscribe((jackpots) => {
-      console.log('jackpots ', jackpots)
-      this.store.dispatch(
-        JackpotsApiActions.retrievedJackpotsList({ jackpots })
-      );
-    });
+    interval(3000)
+      .pipe(switchMap((_: number) => this.jackpotsService.getJackpots()))
+      .subscribe((jackpots) => {
+        console.log('jackpots ', jackpots);
+        this.store.dispatch(
+          JackpotsApiActions.retrievedJackpotsList({ jackpots })
+        );
+      });
   }
 
   onResize(event: any) {
