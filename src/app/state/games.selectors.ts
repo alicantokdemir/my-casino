@@ -1,6 +1,6 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { Game } from '../games/games.model';
-import { selectJackpots } from './jackpots.selectors';
+import { selectJackpotObj } from './jackpots.selectors';
 
 export const selectGames = createFeatureSelector<ReadonlyArray<Game>>('games');
 
@@ -11,10 +11,10 @@ export const selectGamesByCategories = (categories: string[]) =>
     )
   );
 
-// export const selectGameJackpots = createSelector(
-//   selectGames,
-//   selectJackpots,
-//   (games, jackpots) => {
-//     return collection.map((id) => books.find((book) => book.id === id));
-//   }
-// );
+export const selectGameJackpots = createSelector(
+  selectGames,
+  selectJackpotObj,
+  (games, jackpots) => {
+    return games.filter((game) => jackpots[game.id]);
+  }
+);

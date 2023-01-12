@@ -1,10 +1,14 @@
 import { Component } from '@angular/core';
 // import { games } from './games';
 import { Store } from '@ngrx/store';
-import { interval, Observable, switchMap } from 'rxjs';
+import { interval, Observable, startWith, switchMap } from 'rxjs';
 import { JackpotsApiActions } from '../jackpots/jackpots.actions';
 
-import { selectGames, selectGamesByCategories } from '../state/games.selectors';
+import {
+  selectGameJackpots,
+  selectGames,
+  selectGamesByCategories,
+} from '../state/games.selectors';
 import { selectJackpotObj } from '../state/jackpots.selectors';
 import { GamesApiActions } from './games.actions';
 import { Game } from './games.model';
@@ -39,7 +43,11 @@ export class GamesListComponent {
 
   onTabChange(e: any) {
     const { filters } = this.gameTabs[e.index];
-    this.games$ = this.store.select(selectGamesByCategories(filters));
+    if (filters.includes('jackpots')) {
+      this.games$ = this.store.select(selectGameJackpots);
+    } else {
+      this.games$ = this.store.select(selectGamesByCategories(filters));
+    }
   }
 
   breakpoint = 5;
@@ -98,9 +106,11 @@ export class GamesListComponent {
     });
 
     interval(3000)
-      .pipe(switchMap((_: number) => this.jackpotsService.getJackpots()))
+      .pipe(
+        startWith(0),
+        switchMap((_: number) => this.jackpotsService.getJackpots())
+      )
       .subscribe((jackpots) => {
-        console.log('jackpots ', jackpots);
         this.store.dispatch(
           JackpotsApiActions.retrievedJackpotsList({ jackpots })
         );
