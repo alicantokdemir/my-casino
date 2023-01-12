@@ -1,16 +1,19 @@
+@import "../../variables";
+
+.game-tab {
+  background: red;
+}
+
 .game-grid {
   width: 1200px;
   margin: 0 auto;
   max-width: 100%;
-  //   border-radius: 8px;
 }
 
 .game-card {
   border-radius: 8px;
   border-color: transparent;
   box-shadow: none;
-  //   height: 154px;
-  //   width: 260px;
   height: 100%;
   width: 100%;
   max-width: 100%;
@@ -36,5 +39,31 @@
     padding-top: 8px;
     padding-bottom: 8px;
     text-align: center;
+  }
+
+  &__button {
+    position: absolute;
+    top: auto;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    width: 80px;
+    background-color: $green;
+    color: $white;
+    border-radius: 8px;
+    border: none;
+    padding: 5px;
+    display: none;
+    cursor: pointer;
+  }
+}
+
+.game-card:hover {
+  &:after {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+  .game-card__button {
+    display: block;
   }
 }

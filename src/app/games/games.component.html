@@ -29,6 +29,7 @@
               {{ (jackpots$ | async)![game.id] }}
             </div>
             <img mat-card-image [src]="game.image" [alt]="game.name" />
+            <button class="game-card__button">Play</button>
           </mat-card>
         </mat-grid-tile>
       </mat-grid-list>

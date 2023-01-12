@@ -1,10 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~normalize.css";
-
-$green: #8dc63f;
-$dark: #373737;
-$white: #ffffff;
-$lightgray: #fcfcfc;
+@import "variables";
 
 html {
   -webkit-box-sizing: border-box;
@@ -74,4 +70,32 @@ body {
 }
 .corner-ribbon.red {
   background: #e43;
+}
+
+games-list {
+  .mat-mdc-tab.mdc-tab--active {
+    background-color: $green;
+
+    .mdc-tab__ripple::before {
+      background-color: $green;
+    }
+  }
+
+  .mat-mdc-tab {
+    background-color: $dark;
+
+    &:not(.mat-mdc-tab-disabled).mdc-tab--active .mdc-tab__text-label,
+    &:not(.mat-mdc-tab-disabled) .mdc-tab__text-label {
+      color: $white;
+    }
+
+    .mdc-tab__ripple::before {
+      background-color: $dark;
+    }
+  }
+
+  .mat-mdc-tab:not(.mat-mdc-tab-disabled)
+    .mdc-tab-indicator__content--underline {
+    border: none;
+  }
 }

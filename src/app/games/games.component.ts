@@ -1,17 +1,14 @@
 import { Component } from '@angular/core';
-// import { games } from './games';
 import { Store } from '@ngrx/store';
-import { interval, Observable, startWith, switchMap } from 'rxjs';
+import { interval, startWith, switchMap } from 'rxjs';
 import { JackpotsApiActions } from '../jackpots/jackpots.actions';
 
 import {
   selectGameJackpots,
-  selectGames,
   selectGamesByCategories,
 } from '../state/games.selectors';
 import { selectJackpotObj } from '../state/jackpots.selectors';
 import { GamesApiActions } from './games.actions';
-import { Game } from './games.model';
 import { GamesService } from './games.service';
 import { JackpotsService } from '../jackpots/jackpots.service';
 
@@ -40,15 +37,6 @@ export class GamesListComponent {
     private store: Store,
     private jackpotsService: JackpotsService
   ) {}
-
-  onTabChange(e: any) {
-    const { filters } = this.gameTabs[e.index];
-    if (filters.includes('jackpots')) {
-      this.games$ = this.store.select(selectGameJackpots);
-    } else {
-      this.games$ = this.store.select(selectGamesByCategories(filters));
-    }
-  }
 
   breakpoint = 5;
 
@@ -97,6 +85,15 @@ export class GamesListComponent {
 
   games$ = this.store.select(selectGamesByCategories(this.gameTabs[0].filters));
   jackpots$ = this.store.select(selectJackpotObj);
+
+  onTabChange(e: any) {
+    const { filters } = this.gameTabs[e.index];
+    if (filters.includes('jackpots')) {
+      this.games$ = this.store.select(selectGameJackpots);
+    } else {
+      this.games$ = this.store.select(selectGamesByCategories(filters));
+    }
+  }
 
   ngOnInit() {
     this.breakpoint = getGridColCount(window.innerWidth);
